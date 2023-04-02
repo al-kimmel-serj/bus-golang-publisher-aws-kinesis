@@ -18,11 +18,11 @@ type Publisher[Payload proto.Message] struct {
 func New[Payload proto.Message](
 	kinesisClient *kinesis.Client,
 	kinesisStreamARN string,
-) (*Publisher[Payload], error) {
+) *Publisher[Payload] {
 	return &Publisher[Payload]{
 		kinesisClient:    kinesisClient,
 		kinesisStreamARN: kinesisStreamARN,
-	}, nil
+	}
 }
 
 func (p *Publisher[Payload]) Publish(ctx context.Context, events []bus.Event[Payload]) error {

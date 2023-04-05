@@ -32,6 +32,8 @@ func (p *Publisher[Payload]) Publish(ctx context.Context, events []bus.Event[Pay
 
 	records := make([]types.PutRecordsRequestEntry, 0, len(events))
 	for _, event := range events {
+		eventKey := event.EventKey
+
 		msg, err := proto.Marshal(event.EventPayload)
 		if err != nil {
 			return fmt.Errorf("proto.Marshal error: %w", err)
@@ -39,7 +41,7 @@ func (p *Publisher[Payload]) Publish(ctx context.Context, events []bus.Event[Pay
 
 		records = append(records, types.PutRecordsRequestEntry{
 			Data:         msg,
-			PartitionKey: (*string)(&event.EventKey),
+			PartitionKey: (*string)(&eventKey),
 		})
 	}
 
